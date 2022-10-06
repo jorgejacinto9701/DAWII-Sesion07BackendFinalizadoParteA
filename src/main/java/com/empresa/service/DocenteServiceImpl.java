@@ -24,6 +24,11 @@ public class DocenteServiceImpl implements DocenteService {
 		return repository.save(obj);
 	}
 
+	@Override
+	public List<Docente> listaDocente(String nombre, String dni, int idUbigeo) {
+		return repository.listaDocente(nombre, dni, idUbigeo);
+	}
+
 	
 
 }

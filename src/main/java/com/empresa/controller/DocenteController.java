@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,5 +52,23 @@ public class DocenteController {
 		return ResponseEntity.ok(salida);
 	}
 
-
+	@GetMapping("/porFiltro")
+	@ResponseBody
+	public ResponseEntity<List<Docente>> listaDocentePorFiltro(
+				@RequestParam(name = "nombre", required = false, defaultValue = "" )String nombre, 
+				@RequestParam(name = "dni" , required = false, defaultValue = "" ) String dni,
+				@RequestParam(name = "idUbigeo" , required = false, defaultValue = "-1" ) int idUbigeo) {
+		List<Docente> lista = docenteService.listaDocente("%"+nombre+"%", dni, idUbigeo);
+		return ResponseEntity.ok(lista);
+	}
+	
+	
 }
+
+
+
+
+
+
+
+
