@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,14 +53,22 @@ public class DocenteController {
 		return ResponseEntity.ok(salida);
 	}
 
-	@GetMapping("/porFiltro")
+	@GetMapping("/listaDocenteConParametros")
 	@ResponseBody
-	public ResponseEntity<List<Docente>> listaDocentePorFiltro(
-				@RequestParam(name = "nombre", required = false, defaultValue = "" )String nombre, 
-				@RequestParam(name = "dni" , required = false, defaultValue = "" ) String dni,
-				@RequestParam(name = "idUbigeo" , required = false, defaultValue = "-1" ) int idUbigeo) {
+	public ResponseEntity<Map<String, Object>> listaDocentePorFiltro(
+			@RequestParam(name = "nombre", required = false , defaultValue = "")String nombre, 
+			@RequestParam(name = "dni", required = false , defaultValue = "")String dni, 
+			@RequestParam(name = "idUbigeo", required = false , defaultValue = "-1")int idUbigeo) {
+		
+		Map<String, Object> salida = new HashMap<>();
 		List<Docente> lista = docenteService.listaDocente("%"+nombre+"%", dni, idUbigeo);
-		return ResponseEntity.ok(lista);
+		if (CollectionUtils.isEmpty(lista)) {
+			salida.put("mensaje", "No existen datos para mostrar");
+		}else {
+			salida.put("mensaje", "Existen " + lista.size() + " elementos para mostrar");
+			salida.put("lista", lista);
+		}
+		return ResponseEntity.ok(salida);
 	}
 	
 	
